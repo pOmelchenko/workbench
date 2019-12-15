@@ -1,0 +1,17 @@
+{
+    "name": "omelchenko/workbench",
+    "authors": [
+        {
+            "name": "Pavel Omelchenko",
+            "email": "p.Omelchenko@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
