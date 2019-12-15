@@ -3,11 +3,8 @@
 ## Структура файлов и папок
 
 ```text
-.
-├── .env
-├── .git
-├── .gitignore
 ├── README.md
+├── composer.json
 ├── containers
 ├── databases
 ├── docker-compose.yaml
@@ -17,11 +14,18 @@
 
 | что | зачем |
 | --- | --- |
-| `.env` | определение переменных для docker-compose |
-| `containers` | описания контэйнеров |
+| `containers` | Описания контэйнеров |
 | `databases` | Хранилище баз данных |
-| `docker-compose.override.yaml.beta` | Попытка настройки сети |
 | `docker-compose.yaml` | Файл описывающий работу docker-compose |
 | `logs` | Системные логи |
 | `src` | Код приложения |
+
+# Окружение
+### PHP 7.4
+- xdebug
+  - version: 2.8.1
+  - port: 9005
+  - host: host.docker.internal
+  
+### MariaDb 10.4
 
