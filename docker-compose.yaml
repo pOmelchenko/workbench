@@ -4,11 +4,11 @@ services:
 
   nginx:
     build:
-      ./containers/nginx
+      ./environment/docker/nginx
     restart: always
     volumes:
-      - ./logs/nginx:/var/log/nginx
-      - ./src:/application
+      - ./storage/logs/nginx:/var/log/nginx
+      - .:/application
     ports:
       - 80:80
       - 443:443
@@ -19,10 +19,10 @@ services:
 
   php:
     build:
-      ./containers/php/7.4-fpm
+      ./environment/docker/php/7.4
     restart: always
     volumes:
-      - ./src:/application
+      - .:/application
     environment:
       PHP_IDE_CONFIG: "serverName=Docker"
     links:
@@ -32,7 +32,7 @@ services:
 
   mariadb:
     build:
-      ./containers/databases/mariadb
+      ./environment/docker/mariadb/10.4
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=test
@@ -40,29 +40,12 @@ services:
       - MYSQL_USER=test
       - MYSQL_PASSWORD=test
     volumes:
-      - ./databases/mariadb:/var/lib/mysql
-      - ./logs/mariadb:/var/log/mariadb
+      - ./environment/databases/mariadb:/var/lib/mysql
+      - ./storage/logs/mariadb:/var/log/mariadb
     ports:
       - 3306:3306
     networks:
       - internal
-
-#  adminer:
-#    build:
-#      ./containers/adminer
-#    restart: always
-#    ports:
-#      - 8000:8080
-#    networks:
-#      - internal
-
-#  composer:
-#    build:
-#      ./containers/composer
-#    volumes:
-#      - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
-#    working_dir: ${APP_PATH_CONTAINER}
-#    command: composer install
 
 networks:
   internal:
