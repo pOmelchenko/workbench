@@ -8,56 +8,66 @@ services:
     restart: always
     volumes:
       - ./logs/nginx:/var/log/nginx
-      - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
-    working_dir: ${APP_PATH_CONTAINER}
+      - ./src:/application
     ports:
       - 80:80
       - 443:443
     links:
       - php
+    networks:
+      - internal
 
   php:
     build:
-      ./containers/php/7.2-fpm
+      ./containers/php/7.4-fpm
     restart: always
     volumes:
-      - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
-    working_dir: ${APP_PATH_CONTAINER}
+      - ./src:/application
+    environment:
+      PHP_IDE_CONFIG: "serverName=Docker"
     links:
       - mariadb
-
-  node:
-    build:
-      ./containers/node
-    volumes:
-      - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
-    working_dir: ${APP_PATH_CONTAINER}
+    networks:
+      - internal
 
   mariadb:
     build:
       ./containers/databases/mariadb
-    command: --character-set-server=utf8 --collation-server=utf8_general_ci
     restart: always
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
     volumes:
       - ./databases/mariadb:/var/lib/mysql
       - ./logs/mariadb:/var/log/mariadb
-
-  adminer:
-    build:
-      ./containers/adminer
-    restart: always
     ports:
-      - 8000:8080
+      - 3306:3306
+    networks:
+      - internal
 
-  composer:
-    build:
-      ./containers/composer
-    volumes:
-      - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
-    working_dir: ${APP_PATH_CONTAINER}
-    command: composer install
+#  adminer:
+#    build:
+#      ./containers/adminer
+#    restart: always
+#    ports:
+#      - 8000:8080
+#    networks:
+#      - internal
+
+#  composer:
+#    build:
+#      ./containers/composer
+#    volumes:
+#      - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+#    working_dir: ${APP_PATH_CONTAINER}
+#    command: composer install
+
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.220.0/28
