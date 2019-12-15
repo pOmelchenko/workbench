@@ -1,7 +1,9 @@
 <?php
 
-function test($a, $b) {
-    return $a + $b;
-}
+require_once __DIR__ . '/../vendor/autoload.php';
 
-echo test(1, 4);
+use App\Say;
+
+$say = new Say();
+
+echo $say->hello('Pop');
