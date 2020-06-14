@@ -4,7 +4,7 @@ ARG USER_ID
 ARG GROUP_ID
 
 RUN apt-get update && apt-get install -y curl git unzip libcurl4-openssl-dev libzip-dev \
-    && pecl install xdebug-2.8.1 \
+    && pecl install xdebug \
     && docker-php-ext-enable xdebug \
     && docker-php-ext-install pdo_mysql zip
 
